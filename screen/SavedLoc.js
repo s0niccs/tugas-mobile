@@ -4,21 +4,26 @@ import { db } from "../handler/config";
 import { collection, getDocs } from "firebase/firestore";
 
 export default class SavedLoc extends Component {
+  //membuat constructor class
   constructor() {
     super();
+    //membuat state variable
     this.state = {
       locations: [],
       Latitude: "",
       Longitude: "",
     };
   }
-
+  //function ketika class berhasil dibentuk
   componentDidMount() {
     this.getData();
   }
+  //fungsi untuk mendapatkan data dari firestore
   getData = async () => {
+    //membuat variable local locations berbentuk array 
     const locations = [];
     const querySnapshot = await getDocs(collection(db, "SavedLocation"));
+    //untuk setiap dokumen 
     querySnapshot.forEach((doc) => {
       const { Latitude, Longitude } = doc.data();
       locations.push({

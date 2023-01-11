@@ -8,11 +8,8 @@ import {
   BlankButton,
   RegText,
 } from "../comp";
-import {db} from "../handler/config";
-import {
-  doc,
-  setDoc,
-} from 'firebase/firestore';
+import { db } from "../handler/config";
+import { doc, setDoc } from "firebase/firestore";
 
 export class SignUp extends Component {
   constructor(props) {
@@ -24,15 +21,15 @@ export class SignUp extends Component {
       confirmpass: "",
       check_textInputChange: false,
       secureTextEntry: true,
-
     };
   }
   SignUpFunc = () => {
+    //local variable untuk funngsi SignUpFunc
     var Nama = this.state.nama;
     var Email = this.state.email;
     var Password = this.state.password;
     var ConfirmPw = this.state.confirmpass;
-    //cek password sesuai dengan ketentuan
+    //cek inputan apakah sudah terisi
     if (
       Email.length == 0 ||
       Password.length == 0 ||
@@ -49,18 +46,19 @@ export class SignUp extends Component {
     } else if (Password !== ConfirmPw) {
       alert("Password doesn't match!!!");
     } else {
-        setDoc(doc(db,'user', Email),{
-          email: Email,
-          nama: Nama,
-          password: Password,
-        })
+      //membuat dokumen baru di firestore
+      setDoc(doc(db, "user", Email), {
+        email: Email,
+        nama: Nama,
+        password: Password,
+      })
         .then(() => {
           alert("User added!");
           this.props.navigation.navigate("SignIn");
         })
-        .catch((error) =>{
+        .catch((error) => {
           console.log(error);
-      })
+        });
     }
   };
   render() {
@@ -72,20 +70,26 @@ export class SignUp extends Component {
           alignContent: "center",
         }}
       >
+        {/* membuat judul page */}
         <Judul teks="Daftar" />
+        {/* membuat text input untuk email */}
         <Inputan
           teks="Email"
           onChangeText={(email) => this.setState({ email })}
         />
+        {/* membuat text input untuk nama */}
         <Inputan teks="Nama" onChangeText={(nama) => this.setState({ nama })} />
+        {/* membuat text input untuk password */}
         <InputPassword
           teks="Password"
           onChangeText={(password) => this.setState({ password })}
         />
+        {/* membuat text input untuk confirm password */}
         <InputPassword
           teks="Confirm Password"
           onChangeText={(confirmpass) => this.setState({ confirmpass })}
         ></InputPassword>
+        {/* membuat buttton daftar untuk memanggil fungsi SignUpFunc */}
         <Button
           teks="Daftar"
           onPress={() => {
@@ -93,6 +97,7 @@ export class SignUp extends Component {
           }}
         />
         <RegText teks="atau" />
+        {/* Button untuk kembali ke halaman SignIn */}
         <BlankButton
           teks="Masuk"
           onPress={() => this.props.navigation.navigate("SignIn")}

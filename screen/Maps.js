@@ -8,6 +8,7 @@ import { db } from "../handler/config";
 import { doc, setDoc } from "firebase/firestore";
 
 export default class Maps extends Component {
+  //state awal class
   state = {
     mapRegion: null,
     hasLocationPermissions: false,
@@ -16,11 +17,13 @@ export default class Maps extends Component {
     hasilLatitude: 0,
     visible: false,
   };
-
+  //fungsi untuk save location 
   SaveLoc = () => {
+    //local variable 
     let today = new Date().toUTCString();
     hasilLatitude = this.state.hasilLatitude;
     hasilLongitude = this.state.hasilLongitude;
+    //buat dokumen di firestore
     setDoc(doc(db, "SavedLocation", today), {
       Latitude: hasilLatitude,
       Longitude: hasilLongitude,
@@ -32,28 +35,35 @@ export default class Maps extends Component {
         console.log(error);
       });
   };
-
+  //Fungsi untuk di run ketika page ini di panggil
   componentDidMount() {
+    //set interval visibilitas selama 2 detik
     setInterval(() => {
       this.setState({
         visible: !this.state.visible,
       });
     }, 2000);
+    //memanggil fungsi get location
     this._getLocationAsync();
   }
-
+  //fungsi untuk mendapatkan lokasi
   _getLocationAsync = async () => {
+    //mengecek status permission lokasi
     let { status } = await Location.requestForegroundPermissionsAsync();
+    //jika permission tidak diberian
     if (status !== "granted") {
       this.setState({
         locationResult: "Permission to access location was denied",
       });
     } else {
+      //jika telah diberikan set State hasLocationPermissions 
       this.setState({ hasLocationPermissions: true });
     }
-
+    //mendapatkan lokasi terkisi
     let location = await Location.getCurrentPositionAsync({});
+    //mendapatkan nilai dari lokasi dan dimasukkan kedalam state locationResult
     this.setState({ locationResult: JSON.stringify(location) });
+    //memaukkan nilai latitude dan longitude kedalam map region
     this.setState({
       mapRegion: {
         latitude: location.coords.latitude,
@@ -61,17 +71,20 @@ export default class Maps extends Component {
         latitudeDelta: 0.001,
         longitudeDelta: 0.001,
       },
+      //memaukkan latitude dan longtitude ke state hasil
       hasilLatitude: location.coords.latitude,
       hasilLongitude: location.coords.longitude,
     });
   };
 
   render() {
-    const { visible } = this.state;
+    const { visible } = this.state.visible;
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor={"black"}></StatusBar>
+        {/* jika lokasi masih blom ditemukan */}
         {this.state.locationResult === null ? (
+          // maka akan menampilkan animasi roas
           <AnimatedLoader
             visible={visible}
             overlayColor="rgba(255,255,255,0.75)"
@@ -81,6 +94,7 @@ export default class Maps extends Component {
             <Text>Mencari Lokasi Anda...</Text>
           </AnimatedLoader>
         ) : (
+        // jika lokasi ditemukan akan menampilkan maps
           <MapView
             style={{
               flex: 1,
@@ -92,6 +106,7 @@ export default class Maps extends Component {
           </MapView>
         )}
         <View style={styles.cotainer}>
+          {/* menampilkan komponen top */}
           <Top
             long={this.state.hasilLongitude}
             lati={this.state.hasilLatitude}
