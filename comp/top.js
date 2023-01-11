@@ -28,8 +28,6 @@ export default function Top(props) {
           }} 
           >Simpan Lokasi ini</Text>
         </Pressable>
-      </View>
-      <View style={styles.buttoncontainer}>
         <Pressable style={styles.button}
           onPress={props.onPress2}
         >
@@ -82,6 +80,7 @@ const styles = StyleSheet.create({
   buttoncontainer:{
     flex:1,
     alignItems:'center',
+    marginBottom : 20
   },
   button: {
     marginTop:10,
@@ -91,7 +90,6 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     backgroundColor: "red",
-    marginBottom:20,
     borderRadius:15
   },
 });

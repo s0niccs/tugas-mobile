@@ -106,8 +106,8 @@ export default class Maps extends Component {
 
 const styles = StyleSheet.create({
   cotainer: {
-    flex: 1 / 3,
-    height: "20%",
+    flex: 1 / 2.5,
+    height: "10%",
     width: "100%",
     justifyContent: "flex-end",
   },
