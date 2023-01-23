@@ -25,22 +25,25 @@ export class SignIn extends Component {
     //membuat variable local dan assign ke state
     var Email = this.state.email;
     var Password = this.state.password;
+    var Nama;
+    const {navigation} = this.props;
     //mengambil dokumen dari firestore collection "user" dengan nama dokumen adalah isi dari variable local Email
     getDoc(doc(db, "user", Email))
       .then((docData) => {
         //jika data ditemukan
         if (docData.exists()) {
           //jika email dan password pengguna cocol
+          Nama = docData.data().nama
           if (
             docData.data().email == Email &&
             docData.data().password == Password
           ) {
             //maka akan muncul alert Login Berhasil dan diarahkan ke Screen Maps
             alert("Berhasil Login");
-            this.props.navigation.reset({
-              index: 0,
-              routes: [{ name: "Maps" }],
-            });
+            
+            navigation.navigate("Menu", {
+              email : Email
+            })
           } else {
             //jika email dan password tidak match maka akan muncul alert
             alert("E-mail / Password Anda Salah!");
@@ -48,7 +51,7 @@ export class SignIn extends Component {
         } else {
           //jika dokumen tidak ada
           alert("E-mail / Password Anda Salah!");
-        }
+        }5
       })
       .catch((error) => {
         console.log(error);

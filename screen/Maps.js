@@ -78,7 +78,8 @@ export default class Maps extends Component {
   };
 
   render() {
-    const { visible } = this.state.visible;
+    const { visible } = this.state;
+    var Email = this.props.route.params.email;
     return (
       <View style={{ flex: 1 }}>
         <StatusBar backgroundColor={"black"}></StatusBar>
@@ -111,7 +112,9 @@ export default class Maps extends Component {
             long={this.state.hasilLongitude}
             lati={this.state.hasilLatitude}
             onPress={() => this.SaveLoc()}
-            onPress2={() => this.props.navigation.navigate("Saved Location")}
+            onPress2={() => this.props.navigation.navigate("Saved Location",{
+              email: Email
+            })}
           />
         </View>
       </View>
